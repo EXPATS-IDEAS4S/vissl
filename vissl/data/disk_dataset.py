@@ -5,11 +5,12 @@
 
 import logging
 
-from iopath.common.file_io import g_pathmgr
+from fvcore.common.file_io import PathManager
 from PIL import Image
 from torchvision.datasets import ImageFolder
 from vissl.data.data_helper import QueueDataset, get_mean_image
 from vissl.utils.io import load_file
+from vissl.utils.io import save_file
 
 
 class DiskImageDataset(QueueDataset):
@@ -54,9 +55,9 @@ class DiskImageDataset(QueueDataset):
             "disk_folder",
         ], "data_source must be either disk_filelist or disk_folder"
         if data_source == "disk_filelist":
-            assert g_pathmgr.isfile(path), f"File {path} does not exist"
+            assert PathManager.isfile(path), f"File {path} does not exist"
         elif data_source == "disk_folder":
-            assert g_pathmgr.isdir(path), f"Directory {path} does not exist"
+            assert PathManager.isdir(path), f"Directory {path} does not exist"
         self.cfg = cfg
         self.split = split
         self.dataset_name = dataset_name
@@ -83,6 +84,9 @@ class DiskImageDataset(QueueDataset):
                 self.image_dataset = load_file(path)
         elif self.data_source == "disk_folder":
             self.image_dataset = ImageFolder(path)
+            
+            #save_file(self.image_dataset.samples, "/p/project/deepacf/kiste/DC/barbados/k6/checkpoints/samples_k10_800ep.npy")
+            
             logging.info(f"Loaded {len(self.image_dataset)} samples from folder {path}")
 
             # mark as initialized.
@@ -119,6 +123,8 @@ class DiskImageDataset(QueueDataset):
         """
         return self.num_samples()
 
+    #img_pth=[]
+    #img_idx=[]
     def __getitem__(self, idx):
         """
         - We do delayed loading of data to reduce the memory size due to pickling of
@@ -137,6 +143,14 @@ class DiskImageDataset(QueueDataset):
             self._init_queues()
         is_success = True
         image_path = self.image_dataset[idx]
+        #save_file(self.get_image_paths(), "/p/project/deepacf/kiste/DC/juelich_2x85_128x128_15k/checkpoints_train_400ep_exp/disk_dataset_getitem_get_image_paths.json")
+        #
+        #print('###########################################################################################################################')
+        #print('')
+        #print('idx')
+        #print(idx)
+        #image_paths_1 = []
+        #idx1=[]
         try:
             if self.data_source == "disk_filelist":
                 image_path = self._replace_img_path_prefix(
@@ -144,9 +158,11 @@ class DiskImageDataset(QueueDataset):
                     replace_prefix=self._remove_prefix,
                     new_prefix=self._new_prefix,
                 )
-                with g_pathmgr.open(image_path, "rb") as fopen:
+                with PathManager.open(image_path, "rb") as fopen:
                     img = Image.open(fopen).convert("RGB")
             elif self.data_source == "disk_folder":
+                #image_paths_1.append(self.get_image_paths())
+                #idx1.append(idx)
                 img = self.image_dataset[idx][0]
             if is_success and self.enable_queue_dataset:
                 self.on_sucess(img)
@@ -165,4 +181,6 @@ class DiskImageDataset(QueueDataset):
                     )
             else:
                 img = get_mean_image(self.cfg["DATA"][self.split].DEFAULT_GRAY_IMG_SIZE)
+        #save_file(image_paths_1, "/p/project/deepacf/kiste/DC/juelich_2x85_128x128_15k/checkpoints_train_400ep_exp/disk_dataset_getitem_get_image_paths.json",append_to_json=False)
+        #save_file(idx, "/p/project/deepacf/kiste/DC/juelich_2x85_128x128_15k/checkpoints_train_400ep_exp/disk_dataset_getitem_idx1.json",append_to_json=True)        
         return img, is_success
