@@ -3,14 +3,6 @@
         "train": ["airstore://flashblade_imagenet_train", "<unused>"],
         "val": ["airstore://flashblade_imagenet_val", "<unused>"]
     },
-    "cot_dc_2013-15_Apr-Jul": {
-        "train": ["/home/Daniele/data/all_128_germany", ""], 
-        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
-    },
-    "dummy_data_folder": 
-    {"train": ["/p/project/deepacf/kiste/DC/dataset/germany_all_2013/train_germany_128", ""], 
-    "val": ["/p/scratch/deepacf/kiste/DC/dataset/gscale_2013/test", ""]
-    },
     "imagenet1k_folder": {
         "train": ["<img_path>", "<lbl_path>"],
         "val": ["<img_path>", "<lbl_path>"]
@@ -103,22 +95,6 @@
         "train": ["<img_path>", "<lbl_path>"],
         "val": ["<img_path>", "<lbl_path>"]
     },
-    "iwilds_cam_val_filelist": {
-        "train": ["<path to train_images.npy>", "<path to train_label.npy>"],
-        "val": ["<path to val_images.npy>", "<path to val_label.npy>"]
-    },
-    "iwilds_cam_id_val_filelist": {
-        "train": ["<path to train_images.npy>", "<path to train_label.npy>"],
-        "val": ["<path to id_val_images.npy>", "<path to id_val_label.npy>"]
-    },
-    "iwilds_cam_test_filelist": {
-        "train": ["<path to train_images.npy>", "<path to train_label.npy>"],
-        "val": ["<path to test_images.npy>", "<path to test_labels.npy>"]
-    },
-    "iwilds_cam_id_test_filelist": {
-        "train": ["<path to train_images.npy>", "<path to train_label.npy>"],
-        "val": ["<path to id_test_images.npy>", "<path to id_test_labels.npy>"]
-    },
     "kitti_dist_folder": {
         "train": ["<img_path>", "<lbl_path>"],
         "val": ["<img_path>", "<lbl_path>"]
@@ -131,7 +107,7 @@
         "train": ["<img_path>", "<lbl_path>"],
         "val": ["<img_path>", "<lbl_path>"]
     },
-    "patch_camelyon_folder": {
+    "pcam_folder": {
         "train": ["<img_path>", "<lbl_path>"],
         "val": ["<img_path>", "<lbl_path>"]
     },
@@ -186,5 +162,90 @@
     "google-imagenet1k-per10": {
         "train": ["<img_path>", "<lbl_path>"],
         "val": ["<img_path>", "<lbl_path>"]
+    },
+    "dummy_data_folder": {
+        "train": ["/home/Daniele/codes/vissl/content/dummy_data/train", "/home/Daniele/codes/vissl/content/dummy_data/train"],
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", "/home/Daniele/codes/vissl/content/dummy_data/val"]
+    },
+    "cot_dc_2013-15_Apr-Jul": {
+        "train": ["/home/Daniele/data/all_128_germany", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "cot_dc_2013_Apr-Jul_60k": {
+        "train": ["/home/Daniele/data/cot_2013_128_germany", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_msg_2013_Apr-Sep_70k": {
+        "train": ["/home/Daniele/data/ir108_2013_128_germany", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_RGB-grey_2013-2014_min-max_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_RGB_min-max", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_RGB-grey_2013-2014_1th-99th_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_RGB_1th-99th", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_RGB-grey_2013-2014_5th-95th_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_RGB_5th-95th", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_RGB-grey_2013-2014_10th-90th_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_RGB_10th-90th", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_RGB-grey_2013-2014_25th-75th_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_RGB_25th-75th", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2014_10th-90th_CMA_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_GS_10th-90th_CMA", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2014_10th-90th_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_GS_10th-90th", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2016_200-300K_CMA_70k": {
+        "train": ["/data1/crops/ir108_2013-2014-2015-2016_200K-300K_CMA", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2016_200-300K_CMA_70k_case_study": {
+        "train": ["/data1/crops/ir108_2013-2014-2015-2016_200K-300K_CMA_case_study", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2016_200-300K_CMA_70k_test_msg_icon": {
+        "train": ["/data1/crops/ir108_2013-2014-2015-2016_200K-300K_CMA_test_msg_icon", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013_200-300K_closed-CMA_3k": {
+        "train": ["/data1/crops/ir108_2013_GS_200-300_CMA-closed_200x200", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2016_200-300K_closed-CMA_70k": {
+        "train": ["/data1/crops/dcv2_ir108_200x200_k9_expats_70k_200-300K_closed-CMA", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_npy_2013_200-300K_17k": {
+        "train": ["/data1/crops/npy_crops_train", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013_200-300K_test": {
+        "train": ["/data1/crops/ir108_2013-2014-2015-2016_GS_200-300_CMA-closed_200x200/test", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_nc_2013_test": {
+        "train": ["/data1/crops/dcv2_ir108_100x100_k9_expats_35k_nc/nc", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val_nc", ""]
+    },
+    "ir108_tif_128x128_2013-2016_CMA": {
+        "train": ["/data1/crops/dcv2_ir108_128x128_k9_expats_70k_200-300K_CMA", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_img_128x128_CMA_centroids-evol": {
+        "train": ["/data1/crops/dcv2_ir108_128x128_k9_expats_70k_200-300K_CMA/test/centroids_evolution/img", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
     }
+
 }

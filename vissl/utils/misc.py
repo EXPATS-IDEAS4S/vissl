@@ -225,17 +225,21 @@ def get_json_catalog_path(default_dataset_catalog_path: str) -> str:
     return dataset_catalog_path
 
 
-def get_json_data_catalog_file():
-    """
-    Searches for the dataset_catalog.json file that contains information about
-    the dataset paths if set by user.
-    """
-    default_path = pkg_resources.resource_filename(
-        "configs", "config/dataset_catalog.json"
-    )
-    json_catalog_path = get_json_catalog_path(default_path)
+# def get_json_data_catalog_file():
+#     """
+#     Searches for the dataset_catalog.json file that contains information about
+#     the dataset paths if set by user.
+#     """
+#     default_path = pkg_resources.resource_filename(
+#         "configs", "config/dataset_catalog.json"
+#     )
+#     json_catalog_path = get_json_catalog_path(default_path)
 
-    return json_catalog_path
+#     return json_catalog_path
+
+def get_json_data_catalog_file():
+    return "/home/Daniele/codes/vissl/vissl/config/dataset_catalog.json"
+
 
 
 @torch.no_grad()

@@ -1,0 +1,242 @@
+{
+    "airstore_imagenet": {
+        "train": ["airstore://flashblade_imagenet_train", "<unused>"],
+        "val": ["airstore://flashblade_imagenet_val", "<unused>"]
+    },
+    "imagenet1k_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "imagenet_a_filelist": {
+        "train": ["<not_used>", "<not_used>"],
+        "val": ["<path_to_test_images.npy>", "<path_to_test_labels.npy>"]
+    },
+    "imagenet_r_filelist": {
+        "train": ["<not_used>", "<not_used>"],
+        "val": ["<path_to_test_images.npy>", "<path_to_test_labels.npy>"]
+    },
+    "imagenette_160_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "places205_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "places365_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "CIFAR10": {
+        "train": ["<path_to_pytorch_dataset>", "<unused>"],
+        "val": ["<path_to_pytorch_dataset>", "<unused>"]
+    },
+    "CIFAR100": {
+        "train": ["<path_to_pytorch_dataset>", "<unused>"],
+        "val": ["<path_to_pytorch_dataset>", "<unused>"]
+    },
+    "STL10": {
+        "train": ["<path_to_pytorch_dataset>", "<unused>"],
+        "val": ["<path_to_pytorch_dataset>", "<unused>"]
+    },
+    "MNIST": {
+        "train": ["<path_to_pytorch_dataset>", "<unused>"],
+        "val": ["<path_to_pytorch_dataset>", "<unused>"]
+    },
+    "SVHN": {
+        "train": ["<path_to_pytorch_dataset>", "<unused>"],
+        "val": ["<path_to_pytorch_dataset>", "<unused>"]
+    },
+    "inaturalist2018_filelist": {
+        "train": ["<path_to_train_images.npy>", "<path_to_train_labels.npy>"],
+        "val": ["<path_to_val_images.npy>", "<path_to_val_labels.npy>"]
+    },
+    "yfcc100m": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "aircrafts_folder": {
+        "train": ["<img_path>", "<unused>"],
+        "val": ["<img_path>", "<unused>"]
+    },
+    "caltech101_folder": {
+        "train": ["<img_path>", "<unused>"],
+        "val": ["<img_path>", "<unused>"]
+    },
+    "clevr_count_filelist": {
+        "train": ["<path_to_train_images.npy>", "<path_to_train_labels.npy>"],
+        "val": ["<path_to_val_images.npy>", "<path_to_val_labels.npy>"]
+    },
+    "clevr_dist_filelist": {
+        "train": ["<path_to_train_images.npy>", "<path_to_train_labels.npy>"],
+        "val": ["<path_to_val_images.npy>", "<path_to_val_labels.npy>"]
+    },
+    "dsprites_loc_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "dsprites_orient_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "dtd_folder": {
+        "train": ["<img_path>", "<unused>"],
+        "val": ["<img_path>", "<unused>"]
+    },
+    "euro_sat_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "food101_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "gtsrb_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "kitti_dist_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "oxford_flowers_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "oxford_pets_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "pcam_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "small_norb_azimuth_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "small_norb_elevation_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "stanford_cars_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "sun397_filelist": {
+        "train": ["<path_to_train_images.npy>", "<path_to_train_labels.npy>"],
+        "val": ["<path_to_val_images.npy>", "<path_to_val_labels.npy>"]
+    },
+    "ucf101_folder": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "kinetics700_frames_folder": {
+        "train": ["<img_path>", "<ignore>"],
+        "val": ["<img_path>", "<ignore>"]
+    },
+    "voc2007_folder": {
+        "train": ["<root_folder>", "<root_folder>"],
+        "val": ["<root_folder>", "<root_folder>"]
+    },
+    "voc2012_folder": {
+        "train": ["<root_folder>", "<root_folder>"],
+        "val": ["<root_folder>", "<root_folder>"]
+    },
+    "coco_folder": {
+        "train": ["<root_folder>", "<root_folder>"],
+        "val": ["<root_folder>", "<root_folder>"]
+    },
+    "imagenet1k-per01": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "imagenet1k-per10": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "google-imagenet1k-per01": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "google-imagenet1k-per10": {
+        "train": ["<img_path>", "<lbl_path>"],
+        "val": ["<img_path>", "<lbl_path>"]
+    },
+    "dummy_data_folder": {
+        "train": ["/home/Daniele/codes/vissl/content/dummy_data/train", "/home/Daniele/codes/vissl/content/dummy_data/train"],
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", "/home/Daniele/codes/vissl/content/dummy_data/val"]
+    },
+    "cot_dc_2013-15_Apr-Jul": {
+        "train": ["/home/Daniele/data/all_128_germany", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "cot_dc_2013_Apr-Jul_60k": {
+        "train": ["/home/Daniele/data/cot_2013_128_germany", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_msg_2013_Apr-Sep_70k": {
+        "train": ["/home/Daniele/data/ir108_2013_128_germany", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_RGB-grey_2013-2014_min-max_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_RGB_min-max", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_RGB-grey_2013-2014_1th-99th_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_RGB_1th-99th", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_RGB-grey_2013-2014_5th-95th_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_RGB_5th-95th", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_RGB-grey_2013-2014_10th-90th_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_RGB_10th-90th", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_RGB-grey_2013-2014_25th-75th_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_RGB_25th-75th", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2014_10th-90th_CMA_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_GS_10th-90th_CMA", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2014_10th-90th_30k": {
+        "train": ["/data1/crops/ir108_2013-2014_GS_10th-90th", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2016_200-300K_CMA_70k": {
+        "train": ["/data1/crops/ir108_2013-2014-2015-2016_200K-300K_CMA", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2016_200-300K_CMA_70k_case_study": {
+        "train": ["/data1/crops/ir108_2013-2014-2015-2016_200K-300K_CMA_case_study", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2016_200-300K_CMA_70k_test_msg_icon": {
+        "train": ["/data1/crops/ir108_2013-2014-2015-2016_200K-300K_CMA_test_msg_icon", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013_200-300K_closed-CMA_3k": {
+        "train": ["/data1/crops/ir108_2013_GS_200-300_CMA-closed_200x200", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013-2016_200-300K_closed-CMA_70k": {
+        "train": ["/data1/crops/dcv2_ir108_200x200_k9_expats_70k_200-300K_closed-CMA", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_npy_2013_200-300K_17k": {
+        "train": ["/data1/crops/npy_crops_train", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_2013_200-300K_test": {
+        "train": ["/data1/crops/ir108_2013-2014-2015-2016_GS_200-300_CMA-closed_200x200/test", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_nc_2013_1k_test": {
+        "train": ["/data1/crops/dcv2_ir108_100x100_test_tensor/nc", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    }
+}

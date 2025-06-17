@@ -50,8 +50,8 @@ class SUPPORTED_L4_STRIDE(int, Enum):
     two = 2
 
 
-@register_model_trunk("resnet_custom") #I have changed the name to resnet_custom
-class ResNeXtCustom(nn.Module): # I have changed the class name to ResNeXtCustom
+@register_model_trunk("resnet")
+class ResNeXt(nn.Module):
     """
     Wrapper for TorchVison ResNet Model to support different depth and
     width_multiplier. We provide flexibility with LAB input, stride in last
@@ -59,7 +59,7 @@ class ResNeXtCustom(nn.Module): # I have changed the class name to ResNeXtCustom
     """
 
     def __init__(self, model_config: AttrDict, model_name: str):
-        super(ResNeXtCustom, self).__init__()
+        super(ResNeXt, self).__init__()
         self.model_config = model_config
         logging.info(
             "ResNeXT trunk, supports activation checkpointing. {}".format(
@@ -104,9 +104,7 @@ class ResNeXtCustom(nn.Module): # I have changed the class name to ResNeXtCustom
         # some tasks like Colorization https://arxiv.org/abs/1603.08511 take input
         # as L channel of an LAB image. In that case we change the input channel
         # and re-construct the conv1
-        #self.input_channels = INPUT_CHANNEL[self.model_config.INPUT_TYPE]
-        self.input_channels = self.model_config.TRUNK.get("input_channels", 3)
-
+        self.input_channels = INPUT_CHANNEL[self.model_config.INPUT_TYPE]
 
         model_conv1 = nn.Conv2d(
             self.input_channels,
@@ -180,14 +178,9 @@ class ResNeXtCustom(nn.Module): # I have changed the class name to ResNeXtCustom
                 checkpointing_splits=self.num_checkpointing_splits,
             )
         else:
-            # model_input = transform_model_input_data_type(
-            #     x, self.model_config.INPUT_TYPE
-            # )
-            if hasattr(self.model_config, "INPUT_TYPE"):
-                model_input = transform_model_input_data_type(x, self.model_config.INPUT_TYPE)
-            else:
-                model_input = x
-
+            model_input = transform_model_input_data_type(
+                x, self.model_config.INPUT_TYPE
+            )
             out = get_trunk_forward_outputs(
                 feat=model_input,
                 out_feat_keys=out_feat_keys,

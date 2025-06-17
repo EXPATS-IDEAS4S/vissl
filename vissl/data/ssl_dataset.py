@@ -358,6 +358,8 @@ class GenericSSLDataset(VisslDatasetBase):
 
         # apply the transforms on the image
         if self.transform:
+            #check what the item is
+            #logging.debug(f"Item before transform: {item}")
             item = self.transform(item)
         return item
 

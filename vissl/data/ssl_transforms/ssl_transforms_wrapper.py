@@ -4,7 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 from typing import Any, Dict
-
+import logging
 from classy_vision.dataset.transforms import (
     build_transform as build_classy_transform,
     register_transform,
@@ -237,6 +237,12 @@ class SSLTransformsWrapper(ClassyTransform):
             sample["data_idx"] = data_idx
             sample["data_valid"] = data_valid
 
+        # Print shapes of the transformed data
+        # for i, img in enumerate(sample["data"]):
+        #     if hasattr(img, "shape"):
+        #         logging.info(f"[Transform Debug] Sample {i} shape: {img.shape}, dtype: {img.dtype}")
+        #     else:
+        #         logging.info(f"[Transform Debug] Sample {i} type: {type(img)}")
         return sample
 
     @classmethod

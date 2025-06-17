@@ -24,6 +24,8 @@ from vissl.utils.misc import is_apex_available
 from vissl.utils.perf_stats import PerfTimer
 from vissl.utils.profiler import record_function
 
+import logging
+
 
 if is_apex_available():
     import apex
@@ -85,7 +87,7 @@ def construct_sample_for_model(batch_data, task):
     for k in batch_data.keys():
         if k not in all_keys:
             sample[k] = batch_data[k]
-
+    
     return sample
 
 
@@ -118,6 +120,16 @@ def standard_train_step(task):
     # Process next sample
     with PerfTimer("read_sample", perf_stats):
         sample = next(task.data_iterator)
+        # # Debug: log sample details and stop after first batch
+        # print(f"[Batch Debug] Sample keys: {sample.keys()}")
+
+        # input_data = sample["data"]
+        # target = sample["label"]
+
+        # # Optional: log full values (for small batches only)
+        # logging.info(f"[DEBUG] Input tensor: {input_data}")
+        # logging.info(f"[DEBUG] Target tensor: {target}")
+
 
     sample = construct_sample_for_model(sample, task)
 

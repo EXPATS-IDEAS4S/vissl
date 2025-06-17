@@ -85,7 +85,14 @@ class DiskImageDataset(QueueDataset):
         elif self.data_source == "disk_folder":
             self.image_dataset = ImageFolder(path)
             
-            #save_file(self.image_dataset.samples, "/p/project/deepacf/kiste/DC/barbados/k6/checkpoints/samples_k10_800ep.npy")
+            #checkpoint_dir = self.loss_config.CHECKPOINT.DIR
+            #os.makedirs(checkpoint_dir, exist_ok=True)
+            #torch.save(..., os.path.join(checkpoint_dir, "filename.pt"))
+
+            checkpoint_dir = self.cfg["CHECKPOINT"]["DIR"]
+            save_file(self.image_dataset.samples, f"{checkpoint_dir}/samples.npy")
+
+            #save_file(self.image_dataset.samples, "/data1/runs/dcv2_ir108_100x100_k9_expats_1k_nc/checkpoints/samples.npy")
             
             logging.info(f"Loaded {len(self.image_dataset)} samples from folder {path}")
 
@@ -143,7 +150,7 @@ class DiskImageDataset(QueueDataset):
             self._init_queues()
         is_success = True
         image_path = self.image_dataset[idx]
-        #save_file(self.get_image_paths(), "/p/project/deepacf/kiste/DC/juelich_2x85_128x128_15k/checkpoints_train_400ep_exp/disk_dataset_getitem_get_image_paths.json")
+        #save_file(self.get_image_paths(), "/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany_60kcrops_1epoch/checkpoints/disk_dataset_getitem_get_image_paths.json")
         #
         #print('###########################################################################################################################')
         #print('')
@@ -181,6 +188,6 @@ class DiskImageDataset(QueueDataset):
                     )
             else:
                 img = get_mean_image(self.cfg["DATA"][self.split].DEFAULT_GRAY_IMG_SIZE)
-        #save_file(image_paths_1, "/p/project/deepacf/kiste/DC/juelich_2x85_128x128_15k/checkpoints_train_400ep_exp/disk_dataset_getitem_get_image_paths.json",append_to_json=False)
-        #save_file(idx, "/p/project/deepacf/kiste/DC/juelich_2x85_128x128_15k/checkpoints_train_400ep_exp/disk_dataset_getitem_idx1.json",append_to_json=True)        
+        #save_file(image_paths_1, "/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany_60kcrops_1epoch/checkpoints/disk_dataset_getitem_get_image_paths.json",append_to_json=False)
+        #save_file(idx, "/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany_60kcrops_1epoch/checkpoints/disk_dataset_getitem_idx1.json",append_to_json=True)        
         return img, is_success

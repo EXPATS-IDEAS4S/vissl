@@ -6,6 +6,7 @@
 import logging
 import math
 import pprint
+import os
 
 import torch
 import torch.distributed as dist
@@ -135,6 +136,7 @@ class DeepClusterV2Loss(ClassyLoss):
                 outputs = []
                 for crop_idx in self.crops_for_mb:
                     inp = inputs["data"][0][crop_idx].cuda(non_blocking=True)
+                    #model = model.to(inp.device)
                     outputs.append(nn.functional.normalize(model(inp)[0], dim=1, p=2))
 
                 # fill the memory bank
@@ -160,6 +162,13 @@ class DeepClusterV2Loss(ClassyLoss):
         self.start_idx += nmb_unique_idx
 
     def cluster_memory(self):
+        print('entering cluster_memory function in deepcluster2_loss.py')
+        
+        # create the directory for checkpoints
+        checkpoint_dir = self.loss_config.CHECKPOINT.DIR
+        logging.info(f"checkpoint_dir: {checkpoint_dir}")
+        os.makedirs(checkpoint_dir, exist_ok=True)
+
         self.start_idx = 0
         j = 0
         with torch.no_grad():
@@ -213,8 +222,12 @@ class DeepClusterV2Loss(ClassyLoss):
 
                 getattr(self, "centroids" + str(i_K)).copy_(centroids)
 #################################################################################
-                torch.save(self.centroids0,"/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany/checkpoints/centroids0.pt")
-                torch.save(self.centroids1,"/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany/checkpoints/centroids1.pt")
+                logging.info(f'Rank: {get_rank()}, saving assignigment' )
+                torch.save(self.centroids0, os.path.join(checkpoint_dir, "centroids0.pt"))
+                #torch.save(self.centroids0,"/data1/runs/dcv2_ir108_100x100_k9_expats_35k_nc/checkpoints/centroids0.pt")
+                #torch.save(self.centroids1,"/data1/runs/dcv_ir108_128x128_k9_germany_30kcrops_grey_10th-90th_CMA/checkpoints/centroids1.pt")
+                #save_file(self.centroids0,"/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany_60kcrops_1epoch/checkpoints/centroids0.pt")
+                #save_file(self.centroids1,"/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany_60kcrops_1epoch/checkpoints/centroids1.pt")
                 #torch.save(self.centroids2,"/p/project/deepacf/kiste/DC/k8/germany_64_800ep/ftrain_2013_55k/centroids2.pt")
                 # gather the assignments
                 assignments_all = gather_from_all(assignments)
@@ -232,11 +245,19 @@ class DeepClusterV2Loss(ClassyLoss):
                 
                 j = (j + 1) % self.nmb_mbs
 #################################################################################
-            torch.save(self.assignments,"/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany/checkpoints/assignments_800ep.pt")
-            torch.save(self.indexes,"/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany/checkpoints/indexes_800ep.pt")
-            torch.save(self.distance,"/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany/checkpoints/distance_800ep.pt")
-            #save_file(self.assignments,"/p/project/deepacf/kiste/DC/juelich_2x85_128x128_15k/assignments_400ep/assignments_crops_mb.npy")
-            #save_file(self.indexes,"/p/project/deepacf/kiste/DC/juelich_2x85_128x128_15k/assignments_400ep/indexes_crops_mb.npy")
+            
+            
+            torch.save(self.assignments, os.path.join(checkpoint_dir, "assignments.pt"))
+            torch.save(self.indexes, os.path.join(checkpoint_dir, "indexes.pt"))
+            torch.save(self.distance, os.path.join(checkpoint_dir, "distances.pt"))
+            #torch.save(self.assignments,"/data1/runs/dcv2_ir108_100x100_k9_expats_35k_nc/checkpoints/assignments.pt")
+            #torch.save(self.indexes,"/data1/runs/dcv2_ir108_100x100_k9_expats_35k_nc/checkpoints/indexes.pt")
+            #torch.save(self.distance,"/data1/runs/dcv2_ir108_100x100_k9_expats_35k_nc/checkpoints/distances.pt")
+            
+            #save_file(self.assignments,"/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany_60kcrops_1epoch/checkpoints/assignments_800ep.pt")
+            #save_file(self.indexes,"/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany_60kcrops_1epoch/checkpoints/indexes_800ep.pt")
+            #save_file(self.distance,"/home/Daniele/codes/vissl/runs/dcv2_cot_128x128_k7_germany_60kcrops_1epoch/checkpoints/distance_800ep.pt")
+            logging.info(f'Rank: {get_rank()}, assignigment saved' )
 ###################################################################################            
         logging.info(f"Rank: {get_rank()}, clustering of the memory bank done")
 

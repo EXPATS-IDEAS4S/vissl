@@ -27,6 +27,7 @@ from vissl.data.ssl_dataset import GenericSSLDataset
 from vissl.data.synthetic_dataset import SyntheticImageDataset
 from vissl.data.torchvision_dataset import TorchvisionDataset
 from vissl.utils.misc import set_dataloader_seeds, setup_multiprocessing_method
+from vissl.data.nc_dataset import NetCDFDataset
 
 
 __all__ = [
@@ -35,6 +36,7 @@ __all__ = [
     "get_data_files",
     "register_datasets",
     "VisslDatasetCatalog",
+    "NetCDFDataset",
 ]
 
 DATASET_SOURCE_MAP = {
@@ -43,6 +45,7 @@ DATASET_SOURCE_MAP = {
     "disk_folder": DiskImageDataset,
     "torchvision_dataset": TorchvisionDataset,
     "synthetic": SyntheticImageDataset,
+    "netcdf": NetCDFDataset, 
 }
 
 
@@ -51,6 +54,7 @@ DATA_SOURCES_WITH_SUBSET_SUPPORT = {
     "disk_folder",
     "torchvision_dataset",
     "synthetic",
+    "netcdf", 
 }
 
 
