@@ -192,7 +192,9 @@ class VisionTransformerCustom(nn.Module):
         img_size = trunk_config.image_size
         patch_size = trunk_config.patch_size
         #in_chans = 3
-        in_chans = model_config.get("input_channels", 3)
+        in_chans = trunk_config.get("input_channels", 3)
+        print(in_chans, "input channels in VisionTransformerCustom")
+        
         embed_dim = trunk_config.hidden_dim
         depth = trunk_config.num_layers
         num_heads = trunk_config.num_heads
