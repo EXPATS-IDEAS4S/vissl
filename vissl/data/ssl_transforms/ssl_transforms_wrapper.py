@@ -237,12 +237,14 @@ class SSLTransformsWrapper(ClassyTransform):
             sample["data_idx"] = data_idx
             sample["data_valid"] = data_valid
 
-        # Print shapes of the transformed data
-        # for i, img in enumerate(sample["data"]):
-        #     if hasattr(img, "shape"):
-        #         logging.info(f"[Transform Debug] Sample {i} shape: {img.shape}, dtype: {img.dtype}")
-        #     else:
-        #         logging.info(f"[Transform Debug] Sample {i} type: {type(img)}")
+        #Print shapes of the transformed data
+        for i, img in enumerate(sample["data"]):
+            if hasattr(img, "shape"):
+                logging.info(f"[Transform Debug] Sample {i} shape: {img.shape}, dtype: {img.dtype}")
+            else:
+                logging.info(f"[Transform Debug] Sample {i} type: {type(img)}")
+            exit()
+        
         return sample
 
     @classmethod

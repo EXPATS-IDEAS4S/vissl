@@ -258,5 +258,9 @@
     "ir108_ot_nc_35k": {
         "train": ["/data1/crops/dcv2_ir108_OT_100x100_35k_nc/nc", ""], 
         "val": ["/home/Daniele/codes/vissl/content/dummy_data/val_2channels_nc", ""]
+    },
+    "ir108_nc_time": {
+        "train": ["/data1/crops/dcv2_ir108_100x100_1k_clips_8frame/nc", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val_time_nc", ""]
     }
 }
