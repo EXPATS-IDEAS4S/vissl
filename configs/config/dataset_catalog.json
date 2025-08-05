@@ -238,5 +238,10 @@
     "ir108_nc_2013_1k_test": {
         "train": ["/data1/crops/dcv2_ir108_100x100_test_tensor/nc", ""], 
         "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+
+    "spatiotemp_ir108cm_2013_8k_100px_8frames": {
+        "train": ["/data/crops/dcv2_ir108cm_2013_8k_100px_8frames/nc/1", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
     }
 }
