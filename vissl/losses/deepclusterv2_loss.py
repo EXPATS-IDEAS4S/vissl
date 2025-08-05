@@ -165,7 +165,7 @@ class DeepClusterV2Loss(ClassyLoss):
         print('entering cluster_memory function in deepcluster2_loss.py')
         
         # create the directory for checkpoints
-        checkpoint_dir = self.loss_config.CHECKPOINT.DIR
+        checkpoint_dir = self.loss_config.save_dir
         logging.info(f"checkpoint_dir: {checkpoint_dir}")
         os.makedirs(checkpoint_dir, exist_ok=True)
 

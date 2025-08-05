@@ -246,6 +246,21 @@
     "ir108_img_128x128_CMA_centroids-evol": {
         "train": ["/data1/crops/dcv2_ir108_128x128_k9_expats_70k_200-300K_CMA/test/centroids_evolution/img", ""], 
         "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_nc_2013_2k": {
+        "train": ["/data1/crops/dcv2_ir108_100x100_1k_nc/nc", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val_nc", ""]
+    },
+    "ir108_wv062_nc_35k": {
+        "train": ["/data1/crops/dcv2_ir108_wv062_100x100_35k_nc/nc", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val_2channels_nc", ""]
+    },
+    "ir108_ot_nc_35k": {
+        "train": ["/data1/crops/dcv2_ir108_OT_100x100_35k_nc/nc", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val_2channels_nc", ""]
+    },
+    "ir108_nc_time": {
+        "train": ["/data1/crops/dcv2_ir108_100x100_1k_clips_8frame/nc", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val_time_nc", ""]
     }
-
 }

@@ -8,57 +8,82 @@ import logging
 
 class NetCDFDataset(Dataset):
     def __init__(self, cfg, path, split, dataset_name, data_source, variables=None):
-        """
-        Args:
-            cfg: VISSL config
-            path: directory of .nc files or list of file paths
-            split: 'train', 'val', etc.
-            dataset_name: name in config
-            data_source: always 'netcdf'
-            variables: list of variable names to use. If None, include all (time, lat, lon) variables
-        """
         self.cfg = cfg
         self.split = split
         self.dataset_name = dataset_name
         self.data_source = data_source
 
-        # Load file paths
+        self.use_full_time_series = getattr(cfg.DATA, "USE_FULL_TIME_SERIES", False)
+        self.config_vars = getattr(cfg.DATA, "VARIABLES", None)
+
         self.files = sorted(glob.glob(os.path.join(path, "*/*.nc"))) if isinstance(path, str) else path
-        self.samples = []  # list of (file_path, time_index) tuples
+        self.samples = []  # If use_full_time_series: just files, else: (file, time_index)
         logging.info(f"Found {len(self.files)} NetCDF files in {path}")
-        
-        # Determine valid variables (once)
-        first_ds = xr.open_dataset(self.files[0], engine="h5netcdf")
-        #print(first_ds)
-        if variables is None:
+
+        # Determine variables to load
+        first_ds = xr.open_dataset(self.files[0])
+        all_vars = list(first_ds.data_vars)
+
+        if variables:
+            self.variables = variables
+        elif self.config_vars:
+            self.variables = [var for var in self.config_vars if var in all_vars]
+        else:
+            # Default to all 3D spatiotemporal variables
             self.variables = [
-                var for var in first_ds.data_vars
+                var for var in all_vars
                 if first_ds[var].dims == ("time", "lat", "lon")
             ]
-        else:
-            self.variables = variables
         first_ds.close()
 
-        # Build full index: one sample per (file, time)
+        if self.config_vars:
+            missing = [var for var in self.config_vars if var not in self.variables]
+            if missing:
+                logging.warning(f"Some config variables not found in dataset: {missing}")
+
+        # Index samples
         for file in self.files:
-            ds = xr.open_dataset(file, engine="h5netcdf")
-            n_times = ds.dims.get("time", 1)
-            for t in range(n_times):
-                self.samples.append((file, t))
-            ds.close()
+            if self.use_full_time_series:
+                self.samples.append(file)
+            else:
+                ds = xr.open_dataset(file)
+                n_times = ds.dims.get("time", 1)
+                for t in range(n_times):
+                    self.samples.append((file, t))
+                ds.close()
 
     def __len__(self):
         return len(self.samples)
 
     def __getitem__(self, idx):
-        file_path, time_idx = self.samples[idx]
-        ds = xr.open_dataset(file_path, engine="h5netcdf")
+        if self.use_full_time_series:
+            file_path = self.samples[idx]
+            ds = xr.open_dataset(file_path)
 
-        channels = []
-        for var in self.variables:
-            data = ds[var].isel(time=time_idx).values#.astype(np.float32)  # or keep dtype?
-            channels.append(data)
+            channels = []
+            for var in self.variables:
+                if var not in ds:
+                    logging.warning(f"Variable {var} not found in {file_path}, skipping.")
+                    continue
+                data = ds[var].values  # (T, H, W)
+                channels.append(data)
 
-        tensor = torch.tensor(np.stack(channels, axis=0))  # [C, H, W]
-        ds.close()
-        return tensor, True  # second output = is_valid for VISSL
+            tensor = torch.tensor(np.stack(channels, axis=0))  # (C, T, H, W)
+            ds.close()
+            return tensor, True
+
+        else:
+            file_path, time_idx = self.samples[idx]
+            ds = xr.open_dataset(file_path)
+
+            channels = []
+            for var in self.variables:
+                if var not in ds:
+                    logging.warning(f"Variable {var} not found in {file_path}, skipping.")
+                    continue
+                data = ds[var].isel(time=time_idx).values
+                channels.append(data)
+
+            tensor = torch.tensor(np.stack(channels, axis=0))  # (C, H, W)
+            ds.close()
+            return tensor, True

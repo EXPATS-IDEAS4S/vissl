@@ -338,7 +338,8 @@ class R2plus1D(nn.Module):
             )
         )
 
-        self.input_channels = INPUT_CHANNEL[self.model_config.INPUT_TYPE]
+        #self.input_channels = INPUT_CHANNEL[self.model_config.INPUT_TYPE]
+        self.input_channels = self.model_config.TRUNK.get("input_channels", 3)
         self.trunk_config = self.model_config.TRUNK.R2PLUS1D
         self.depth = SUPPORTED_DEPTHS(self.trunk_config.DEPTH)
         self.width_multiplier = self.trunk_config.WIDTH_MULTIPLIER
@@ -364,7 +365,7 @@ class R2plus1D(nn.Module):
             block=block,
             layers=(n1, n2, n3, n4),
             block_inplanes=get_inplanes(),
-            n_input_channels=self.input_channels.value,  # Assuming RGB input
+            n_input_channels=self.input_channels,  # Assuming RGB input
             conv1_s_size=self.kernel_s_size,
             conv1_s_stride=2,
             conv1_t_size=self.kernel_t_size,
