@@ -215,7 +215,7 @@ class ResNet2plus1D(nn.Module):
         self.conv1_s = nn.Conv3d(n_input_channels,
                                  mid_planes,
                                  kernel_size=(1, conv1_s_size, conv1_s_size),
-                                 stride=(1, 2, conv1_s_stride),
+                                 stride=(1, conv1_s_stride, conv1_s_stride),
                                  padding=(0, conv1_s_size // 2, conv1_s_size // 2),
                                  bias=False)
         self.bn1_s = nn.BatchNorm3d(mid_planes)
@@ -465,7 +465,7 @@ class R2plus1D(nn.Module):
 #     #     print("layer shape:", feature_block)
 
 #     # Create a dummy input tensor
-#     input_tensor = torch.randn(1, 1, 8, 100, 100)  # Batch size of 1, RGB image
+#     input_tensor = torch.randn(1, 3, 8, 100, 100)  # Batch size of 1, RGB image
 #     # Forward pass
 #     # output = model(input_tensor, out_feat_keys=["res5"])
 #     # print("Output shape:", output.shape)  # Should be [1, 1000] for ImageNet
