@@ -1,3 +1,12 @@
+# ImgPilToMultiCropWithTime takes a video tensor shaped (C, T, H, W) 
+# and produces multiple spatial crops (applied identically to every time frame)
+#  and optionally temporal sub-windows of those crops. 
+# Spatial cropping mimics RandomResizedCrop (area-based random crop + resize) 
+# but implemented on tensors. Temporal cropping chooses overlapping time windows 
+# for the first two views.
+
+# Readapted from ImgPilToMultiCrop by Daniele Corradini
+
 # Copyright (c) Facebook, Inc. and its affiliates.
 
 # This source code is licensed under the MIT license found in the
@@ -10,6 +19,8 @@ import torch
 import torchvision.transforms.functional as F
 from classy_vision.dataset.transforms import register_transform
 from classy_vision.dataset.transforms.classy_transform import ClassyTransform
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 
 
 @register_transform("ImgPilToMultiCropWithTime")
@@ -28,6 +39,7 @@ class ImgPilToMultiCropWithTime(ClassyTransform):
         num_crops: Sequence[int],
         size_crops: Sequence[int],
         crop_scales: Sequence[Sequence[float]],
+        aspect_ratio: float = 1.0,
         temporal_crop: bool = False,
         temporal_window: int = None,
         temporal_overlap: float = 0.75,
@@ -39,6 +51,7 @@ class ImgPilToMultiCropWithTime(ClassyTransform):
         self.temporal_crop = temporal_crop
         self.temporal_window = temporal_window
         self.temporal_overlap = temporal_overlap
+        self.aspect_ratio = aspect_ratio
 
         # Prepare parameters for each crop type (repeat params for num_crops)
         self.crop_params = []
@@ -56,48 +69,103 @@ class ImgPilToMultiCropWithTime(ClassyTransform):
         C, T, H, W = video.shape
 
         crops = []
+        crops_info = []  # to store crop parameters for plotting
+
         for size, scale in self.crop_params:
-            # For each crop, apply the same spatial crop params across all T frames
-
-            # Generate parameters for RandomResizedCrop:
-            # RandomResizedCrop uses scale and ratio; here we only use scale (ratio=1 for square)
-            # So we need to generate random crop coordinates and resize.
-
-            # Compute target area range
             area = H * W
             for attempt in range(10):
                 target_area = random.uniform(scale[0], scale[1]) * area
-                aspect_ratio = 1.0  # square crops only
-
-                w = int(round((target_area * aspect_ratio) ** 0.5))
-                h = int(round((target_area / aspect_ratio) ** 0.5))
+                w = int(round((target_area * self.aspect_ratio) ** 0.5))
+                h = int(round((target_area / self.aspect_ratio) ** 0.5))
 
                 if w <= W and h <= H:
                     top = random.randint(0, H - h)
                     left = random.randint(0, W - w)
                     break
             else:
-                # Fallback to center crop
                 w = min(W, H)
                 h = w
                 top = (H - h) // 2
                 left = (W - w) // 2
-            
-            print(f"Spatial crop params - top: {top}, left: {left}, height: {h}, width: {w}")
+            print(f"Cropping frame: top={top}, left={left}, height={h}, width={w}")
 
             cropped_frames = []
             for t in range(T):
                 frame = video[:, t]  # (C, H, W)
                 cropped = frame[:, top : top + h, left : left + w]
-                resized = F.resize(cropped, [size, size])  # resize to output size
+                resized = F.resize(cropped, [size, size])
                 cropped_frames.append(resized)
 
             crop_tensor = torch.stack(cropped_frames, dim=1)  # (C, T, size, size)
             crops.append(crop_tensor)
 
-        # Temporal cropping (if enabled and more than 1 frame)
+            # Store crop info - before temporal cropping
+            crops_info.append({
+                'top': top,
+                'left': left,
+                'height': h,
+                'width': w,
+                'temporal_start': 0,
+                'temporal_len': self.temporal_window or T
+            })
+
+        # Apply temporal cropping if enabled
         if self.temporal_crop and T > 1:
-            crops = self._apply_temporal_crop(crops)
+            crops, starts = self._apply_temporal_crop(crops)
+
+            # Update temporal info based on temporal cropping
+            # (Assuming _apply_temporal_crop returns cropped tensors with length <= T)
+            for i, crop in enumerate(crops):
+                crops_info[i]['temporal_start'] = starts[i]  # new temporal length
+
+            # If you know the temporal start indices, update 'temporal_start' in crops_info accordingly
+            # For example, if your _apply_temporal_crop method returns the starts, set them here.
+
+        # ----- PLOTTING -----
+        num_views = len(crops)
+        fig, axs = plt.subplots(num_views, T, figsize=(3 * T, 3 * num_views))
+
+        for v in range(num_views):
+            crop = crops[v]  # (C, crop_T, crop_H, crop_W)
+            info = crops_info[v]
+            start = info['temporal_start']
+            end = start + info['temporal_len']
+            top = info['top']
+            left = info['left']
+            width = info['width']
+            height = info['height']
+
+            for t in range(T):
+                ax = axs[v, t] if num_views > 1 else axs[t]
+
+                # Always plot the original full frame first
+                full_frame = video[:, t].cpu().numpy()
+                if C == 1:
+                    ax.imshow(full_frame.squeeze(), cmap='gray_r', vmin=200, vmax=300)
+                else:
+                    ax.imshow(full_frame[0], cmap='gray_r', vmin=200, vmax=300)  # first channel only
+
+                # If t is inside crop's temporal window, overlay the spatial region
+                if start <= t < end:
+                    if C == 1:
+                        crop_region = full_frame[0, top:top+height, left:left+width]
+                    else:
+                        crop_region = full_frame[0, top:top+height, left:left+width]
+
+                    # Create a masked overlay so only that region is colored
+                    overlay = np.full_like(full_frame[0], np.nan, dtype=float)  # NaNs mean transparent in imshow
+                    overlay[top:top+height, left:left+width] = crop_region
+
+                    ax.imshow(overlay, cmap='Reds', vmin=200, vmax=300, alpha=0.5)
+
+                ax.set_title(f"View {v} Time {t}")
+                ax.axis('off')
+
+        fig.savefig("/data1/runs/dcv2_ir108_100x100_k9_1k_nc_r2dplus1/crop_time_all.png", bbox_inches='tight')
+        print('saved fig')
+        plt.close()
+
+        # --------------------
 
         return crops
 
@@ -119,10 +187,10 @@ class ImgPilToMultiCropWithTime(ClassyTransform):
         start2_min = max(0, start1 - shift_range)
         start2_max = min(T - win_len, start1 + shift_range)
         start2 = random.randint(start2_min, start2_max)
-
         print(f"Temporal crop starts - start1: {start1}, start2: {start2}")
         
         cropped_temporal = []
+        starts = []
         for i, view in enumerate(crops):
             if i == 0:
                 start = start1
@@ -131,9 +199,10 @@ class ImgPilToMultiCropWithTime(ClassyTransform):
             else:
                 # For extra crops: just match view 1's time window
                 start = start1
+            starts.append(start)
             cropped_temporal.append(view[:, start : start + win_len])
 
-        return cropped_temporal
+        return cropped_temporal, starts
 
     @classmethod
     def from_config(cls, config: Dict[str, Any]) -> "ImgPilToMultiCropWithTime":
