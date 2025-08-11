@@ -11,6 +11,7 @@ from classy_vision.dataset.transforms import (
 )
 from classy_vision.dataset.transforms.classy_transform import ClassyTransform
 from vissl.utils.misc import is_augly_available
+import matplotlib.pyplot as plt
 
 if is_augly_available():
     import augly.image as imaugs  # NOQA
@@ -23,6 +24,7 @@ _TRANSFORMS_WITH_COPIES = [
     "ImgReplicatePil",
     "ImgPilToPatchesAndImage",
     "ImgPilToMultiCrop",
+    "ImgPilToMultiCropWithTime"
 ]
 _TRANSFORMS_WITH_GROUPING = ["ImgPilMultiCropRandomApply"]
 _TRANSFORMS_WITH_OVERWRITE_ENTIRE_BATCH = ["OneHotEncode"]
@@ -212,12 +214,42 @@ class SSLTransformsWrapper(ClassyTransform):
             sample["data"] = output
         else:
             for idx in indices:
+                print('sample before transform:')
+                print(sample["data"][idx].shape)
                 output = self.transform(sample["data"][idx])
+                #plot the sample before transform
+                item_full = sample["data"][idx].squeeze(0)    # shape: [8, 75, 75]
+                # loop over time steps
+                if item_full.shape[0] > 1:
+                    for t in range(item_full.shape[0]):
+                        #print(item[t]) # check if values are BT or RGB
+                        plt.imshow(item_full[t], cmap='gray_r', vmin=200, vmax=300)
+                        plt.title(f"Time step {t}")  
+                        plt.axis('off')
+                        plt.savefig(f"/data1/runs/dcv2_ir108_100x100_k9_1k_nc_r2dplus1/crop_time_{t}.png", bbox_inches='tight')
+
                 if self._is_transform_with_labels():
                     sample["data"][idx] = output[0]
                     sample["label"][-1] = output[1]
                 else:
                     sample["data"][idx] = output
+                #print('sample after transform:')
+                
+                for i, item in enumerate(sample["data"][idx]):
+                    print(f"View {i} shape: {item.shape}")
+                    #plot the subcrop for each time step
+                    #in case channel_dim=1 remove the channel dimension  
+                    item = item.squeeze(0)    # shape: [8, 75, 75]
+                    # loop over time steps
+                    if item.shape[0] > 1:
+                        for t in range(item.shape[0]):
+                            #print(item[t]) # check if values are BT or RGB
+                            plt.imshow(item[t], cmap='gray_r', vmin=200, vmax=300)
+                            plt.title(f"Time step {t}")
+                            plt.axis('off')
+                            plt.savefig(f"/data1/runs/dcv2_ir108_100x100_k9_1k_nc_r2dplus1/sample_{i}_time_{t}.png", bbox_inches='tight')
+                
+                exit()
 
         if self._is_transform_with_copies():
             # if the transform makes copies of the data, we just flatten the list
@@ -243,6 +275,7 @@ class SSLTransformsWrapper(ClassyTransform):
         #         logging.info(f"[Transform Debug] Sample {i} shape: {img.shape}, dtype: {img.dtype}")
         #     else:
         #         logging.info(f"[Transform Debug] Sample {i} type: {type(img)}")
+        #     exit()
         
         return sample
 
