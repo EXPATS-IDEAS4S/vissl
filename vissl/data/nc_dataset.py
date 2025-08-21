@@ -17,11 +17,16 @@ class NetCDFDataset(Dataset):
         self.config_vars = getattr(cfg.DATA, "VARIABLES", None)
 
         self.files = sorted(glob.glob(os.path.join(path, "*/*.nc"))) if isinstance(path, str) else path
-        self.samples = []  # If use_full_time_series: just files, else: (file, time_index)
         logging.info(f"Found {len(self.files)} NetCDF files in {path}")
 
-        # Determine variables to load
-        first_ds = xr.open_dataset(self.files[0])
+        # ---- NEW: infer classes from folder structure ----
+        class_names = sorted({os.path.basename(os.path.dirname(f)) for f in self.files})
+        self.class_to_idx = {cls_name: i for i, cls_name in enumerate(class_names)}
+
+        self.samples = []  # (file, label) or (file, t, label)
+
+        # Determine variables
+        first_ds = xr.open_dataset(self.files[0], engine="h5netcdf")
         all_vars = list(first_ds.data_vars)
 
         if variables:
@@ -29,11 +34,7 @@ class NetCDFDataset(Dataset):
         elif self.config_vars:
             self.variables = [var for var in self.config_vars if var in all_vars]
         else:
-            # Default to all 3D spatiotemporal variables
-            self.variables = [
-                var for var in all_vars
-                if first_ds[var].dims == ("time", "lat", "lon")
-            ]
+            self.variables = [var for var in all_vars if first_ds[var].dims == ("time", "lat", "lon")]
         first_ds.close()
 
         if self.config_vars:
@@ -41,15 +42,18 @@ class NetCDFDataset(Dataset):
             if missing:
                 logging.warning(f"Some config variables not found in dataset: {missing}")
 
-        # Index samples
+        # Index samples with labels
         for file in self.files:
+            class_name = os.path.basename(os.path.dirname(file))
+            class_idx = self.class_to_idx[class_name]
+
             if self.use_full_time_series:
-                self.samples.append(file)
+                self.samples.append((file, class_idx))
             else:
-                ds = xr.open_dataset(file)
+                ds = xr.open_dataset(file, engine="h5netcdf")
                 n_times = ds.dims.get("time", 1)
                 for t in range(n_times):
-                    self.samples.append((file, t))
+                    self.samples.append((file, t, class_idx))
                 ds.close()
 
     def __len__(self):
@@ -57,8 +61,8 @@ class NetCDFDataset(Dataset):
 
     def __getitem__(self, idx):
         if self.use_full_time_series:
-            file_path = self.samples[idx]
-            ds = xr.open_dataset(file_path)
+            file_path, label = self.samples[idx]
+            ds = xr.open_dataset(file_path, engine="h5netcdf")
 
             channels = []
             for var in self.variables:
@@ -70,11 +74,11 @@ class NetCDFDataset(Dataset):
 
             tensor = torch.tensor(np.stack(channels, axis=0))  # (C, T, H, W)
             ds.close()
-            return tensor, True
+            return tensor, label
 
         else:
-            file_path, time_idx = self.samples[idx]
-            ds = xr.open_dataset(file_path)
+            file_path, time_idx, label = self.samples[idx]
+            ds = xr.open_dataset(file_path, engine="h5netcdf")
 
             channels = []
             for var in self.variables:
@@ -86,4 +90,8 @@ class NetCDFDataset(Dataset):
 
             tensor = torch.tensor(np.stack(channels, axis=0))  # (C, H, W)
             ds.close()
-            return tensor, True
+            return tensor, label
+
+    # ---- helper for VISSL ----
+    def get_labels(self):
+        return [lbl for *_, lbl in self.samples]

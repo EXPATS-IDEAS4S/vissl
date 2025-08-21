@@ -246,6 +246,9 @@ class GenericSSLDataset(VisslDatasetBase):
                 labels = np.array(self.data_objs[idx].get_labels()).astype(np.int64)
             elif label_source == "synthetic":
                 labels = np.array([0 for _ in range(len(self.data_objs[idx]))])
+            elif label_source == "netcdf":
+                labels = np.array(self.data_objs[idx].get_labels()).astype(np.int64)
+                #print(len(labels))
             else:
                 raise ValueError(f"unknown label source: {label_source}")
             self.label_objs.append(labels)
