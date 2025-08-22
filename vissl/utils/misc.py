@@ -238,7 +238,9 @@ def get_json_catalog_path(default_dataset_catalog_path: str) -> str:
 #     return json_catalog_path
 
 def get_json_data_catalog_file():
-    return "/home/Daniele/codes/vissl/vissl/config/dataset_catalog.json"
+    # return relative path to dataset catalog file
+    current_dir = os.path.dirname(__file__)
+    return os.path.join(current_dir, "../../configs/config/dataset_catalog.json")
 
 
 
