@@ -266,6 +266,10 @@
     "ir108_nc_time_hail_classes": {
         "train": ["/sat_data/crops/2006-2023_4-9_areathresh30_res15min_5frames_gap15min_cropsize75_min5pix_IR108-cm/train", ""], 
         "val": ["/sat_data/crops/2006-2023_4-9_areathresh30_res15min_5frames_gap15min_cropsize75_min5pix_IR108-cm/val", ""]
+    },
+    "ir108_nc_time_hail_classes_test": {
+        "val": ["/sat_data/crops/2006-2023_4-9_areathresh30_res15min_5frames_gap15min_cropsize75_min5pix_IR108-cm/test", ""]
     }
+
 
 }
