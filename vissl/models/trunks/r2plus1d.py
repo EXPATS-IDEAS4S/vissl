@@ -351,6 +351,7 @@ class R2plus1D(nn.Module):
         )
         self.kernel_t_size = self.trunk_config.KERNEL_T_SIZE
         self.kernel_s_size = self.trunk_config.KERNEL_S_SIZE
+        #self.n_classes = self.trunk_config.get("NUM_CLASSES", 1000) # possibly needed here to make sure the output is of the correct shape
 
         (n1, n2, n3, n4) = BLOCK_CONFIG[self.depth]["layer"]
         block = BLOCK_CONFIG[self.depth]["block"]

@@ -243,5 +243,11 @@
     "spatiotemp_ir108cm_2013_8k_100px_8frames": {
         "train": ["/data/crops/dcv2_ir108cm_2013_8k_100px_8frames/nc/1", ""], 
         "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+
+    "spatiotemp_hail_ir108cm_2006-2023_12k_75px_5frames": {
+        "train": ["/sat_data/crops/2006-2023_4-9_areathresh30_res15min_5frames_gap15min_cropsize75_min5pix_IR108-cm/train", ""], 
+        "val": ["/sat_data/crops/2006-2023_4-9_areathresh30_res15min_5frames_gap15min_cropsize75_min5pix_IR108-cm/val", ""],
+        "test": ["/sat_data/crops/2006-2023_4-9_areathresh30_res15min_5frames_gap15min_cropsize75_min5pix_IR108-cm/test", ""]
     }
 }
