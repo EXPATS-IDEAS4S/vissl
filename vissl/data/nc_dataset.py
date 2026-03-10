@@ -79,17 +79,23 @@ class NetCDFDataset(Dataset):
         else:
             file_path, time_idx, label = self.samples[idx]
             ds = xr.open_dataset(file_path, engine="h5netcdf")
-
+            #print(ds)
             channels = []
             for var in self.variables:
                 if var not in ds:
                     logging.warning(f"Variable {var} not found in {file_path}, skipping.")
                     continue
-                data = ds[var].isel(time=time_idx).values
+                #check if time dimension exists
+                if "time" not in ds[var].dims:
+                    data = ds[var].values
+                else:
+                    data = ds[var].isel(time=time_idx).values
+                #print(data.shape)
                 channels.append(data)
-
+            #print(channels)
             tensor = torch.tensor(np.stack(channels, axis=0))  # (C, H, W)
             ds.close()
+
             return tensor, label
 
     # ---- helper for VISSL ----

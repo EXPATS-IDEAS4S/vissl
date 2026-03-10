@@ -269,6 +269,14 @@
     },
     "ir108_nc_time_hail_classes_test": {
         "val": ["/sat_data/crops/2006-2023_4-9_areathresh30_res15min_5frames_gap15min_cropsize75_min5pix_IR108-cm/test", ""]
+    },
+     "ir108_GS_test_teamx_msg_icon_300625": {
+        "train": ["/data1/crops/test_case_teamx_ir108_icon_msg_30062025", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
+    },
+    "ir108_GS_test_teamx_msg_icon_300625_cropped": {
+        "train": ["/data1/crops/test_case_teamx_ir108_icon_msg_30062025_cropped", ""], 
+        "val": ["/home/Daniele/codes/vissl/content/dummy_data/val", ""]
     }
 
 
